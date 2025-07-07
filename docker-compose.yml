@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gameplay-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./static:/app/static
+      - ./clusters.pkl:/app/clusters.pkl
+      - ./faiss.index:/app/faiss.index
+      - ./temp:/app/temp
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: gameplay-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
